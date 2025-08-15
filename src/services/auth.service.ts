@@ -39,7 +39,9 @@ export async function registerUser(input: {
   const statusActive = await prisma.status.findUnique({ where: { status_name: 'active' } });
 
   if (!roleUser || !statusActive) {
-    const e = new Error('Справочник ролей/ статусов не инициализированы') as Error & { status: number };
+    const e = new Error('Справочник ролей/ статусов не инициализированы') as Error & {
+      status: number;
+    };
     e.status = 500;
     throw e;
   }
