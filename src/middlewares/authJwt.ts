@@ -7,7 +7,7 @@ export interface AuthRequest extends Request {
 
 type AccessTokenPayload = JwtPayload & {
   role: 'admin' | 'user';
-  sub: string; // sub строка по типам jsonwebtoken
+  sub: string; 
 };
 
 export function authJwt(req: AuthRequest, res: Response, next: NextFunction) {
