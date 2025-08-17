@@ -5,6 +5,7 @@ interface RegisterBody {
   birthDate: string;
   email: string;
   password: string;
+  roleName?: string;
 }
 
 export function isNonEmptyString(v: unknown, max = 100): v is string {
@@ -71,5 +72,6 @@ export function pickRegisterBody(body: RegisterBody) {
     birthDate: birthDate!,
     email,
     password: body.password as string,
+    roleName: body.roleName ? String(body.roleName).trim().toLowerCase() : undefined,
   };
 }
