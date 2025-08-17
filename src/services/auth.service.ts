@@ -2,6 +2,9 @@ import bcrypt from 'bcryptjs';
 import prisma from '../db/prisma';
 import { Prisma } from '@prisma/client';
 import type { User, Role, Status } from '@prisma/client';
+import { HttpError } from '../utils/httpError';
+
+export type UserWithRs = User & { role: Role; status: Status };
 
 type PublicUser = {
   id: number;
@@ -78,4 +81,23 @@ export async function registerUser(input: {
     }
     throw err;
   }
+}
+
+
+export async function verifyCredentials(email: string, password: string): Promise<UserWithRs> {
+  const normalized = String(email).trim().toLowerCase();
+  const user = await prisma.user.findUnique({
+    where: { email: normalized },
+    include: { role: true, status: true },
+  });
+  if(!user) throw new HttpError(401, 'Неверный email или пароль нет email');
+
+  const ok = await bcrypt.compare(password, user.password_hash);
+  if(!ok) throw new HttpError(401, 'Неверный email или пароль нет pass');
+
+  if (user.status.status_name !== 'active') {
+    throw new HttpError(403, 'Пользователь заблокирован');
+  }
+
+  return user;
 }
