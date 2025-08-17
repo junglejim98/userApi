@@ -20,19 +20,21 @@ export async function register(req: Request, res: Response, next: NextFunction) 
 
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
-    const email = String(req.body.email ?? '').trim().toLocaleLowerCase();
+    const email = String(req.body.email ?? '')
+      .trim()
+      .toLocaleLowerCase();
     const password = String(req.body.password ?? '');
 
-    if(!email || !password){
-      return res.status(400).json({ message: 'Email и пароль обязательны'});
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email и пароль обязательны' });
     }
 
     const user = await verifyCredentials(email, password);
 
     const token = jwt.sign(
-      {sub: user.id, role: user.role.role_name },
+      { sub: user.id, role: user.role.role_name },
       process.env.JWT_SECRET as string,
-      { expiresIn: '1h' }
+      { expiresIn: '1h' },
     );
 
     return res.json({
@@ -46,7 +48,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
         status: user.status.status_name,
       },
     });
-  } catch(err){
+  } catch (err) {
     next(err);
   }
 }

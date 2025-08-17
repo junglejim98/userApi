@@ -83,17 +83,16 @@ export async function registerUser(input: {
   }
 }
 
-
 export async function verifyCredentials(email: string, password: string): Promise<UserWithRs> {
   const normalized = String(email).trim().toLowerCase();
   const user = await prisma.user.findUnique({
     where: { email: normalized },
     include: { role: true, status: true },
   });
-  if(!user) throw new HttpError(401, 'Неверный email или пароль нет email');
+  if (!user) throw new HttpError(401, 'Неверный email или пароль нет email');
 
   const ok = await bcrypt.compare(password, user.password_hash);
-  if(!ok) throw new HttpError(401, 'Неверный email или пароль нет pass');
+  if (!ok) throw new HttpError(401, 'Неверный email или пароль нет pass');
 
   if (user.status.status_name !== 'active') {
     throw new HttpError(403, 'Пользователь заблокирован');
