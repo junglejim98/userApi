@@ -8,7 +8,7 @@ type PublicUser = {
   firstName: string;
   lastName: string;
   middleName?: string;
-  bierthDate: string;
+  birthDate: string;
   email: string;
   role: string;
   status: string;
@@ -20,7 +20,7 @@ function toPublicUser(u: User & { role: Role; status: Status }): PublicUser {
     firstName: u.first_name,
     lastName: u.last_name,
     middleName: u.middle_name ?? undefined,
-    bierthDate: u.birth_date.toISOString().slice(0, 10),
+    birthDate: u.birth_date.toISOString().slice(0, 10),
     email: u.email,
     role: u.role.role_name,
     status: u.status.status_name,
@@ -34,8 +34,10 @@ export async function registerUser(input: {
   birthDate: Date;
   email: string;
   password: string;
+  roleName?: string;
 }): Promise<PublicUser> {
-  const roleUser = await prisma.role.findUnique({ where: { role_name: 'user' } });
+  const roleName = input.roleName ?? 'user';
+  const roleUser = await prisma.role.findUnique({ where: { role_name: roleName } });
   const statusActive = await prisma.status.findUnique({ where: { status_name: 'active' } });
 
   if (!roleUser || !statusActive) {
