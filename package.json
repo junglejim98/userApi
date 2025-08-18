@@ -2,8 +2,15 @@
   "name": "userapi",
   "version": "1.0.0",
   "main": "index.js",
+  "prisma": {
+    "seed": "ts-node src/utils/seed.ts"
+  },
   "scripts": {
     "lint": "eslint \"./src/**/*.{js,ts}\"",
+     "seed": "ts-node src/utils/seed.ts",
+    "migrate": "prisma migrate dev",        
+    "db:deploy": "prisma migrate deploy",  
+    "db:seed": "prisma db seed",
     "format": "prettier --write \"./src/**/*.{js,ts,json,md}\"",
     "prepare": "husky",
     "dev": "ts-node src/server.ts",

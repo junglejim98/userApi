@@ -1,0 +1,121 @@
+@baseUrl = http://localhost:3000
+@api = {{baseUrl}}/api
+
+# Данные сид-админа (должны совпадать с ADMIN_EMAIL/ADMIN_PASSWORD из seed/.env)
+@seedAdminEmail = admin@example.com
+@seedAdminPassword = admin123ADMIN
+
+# Чтобы не ловить 409 при повторных прогонах — меняй суффикс
+@suffix = 001
+
+# Второй админ
+@admin2Email = admin-{{suffix}}@example.com
+@admin2Password = Admin2#Pass123
+
+# Пользователь "Тест"
+@testEmail = test-{{suffix}}@example.com
+@testPassword = TestUser#123
+
+
+### 0) Health
+GET {{baseUrl}}/health
+
+
+### 1) Логин сид-админа
+# @name loginAdmin
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{seedAdminEmail}}",
+  "password": "{{seedAdminPassword}}"
+}
+
+
+### 2) Создать ещё одного админа (через admin-only роут)
+# @name createAdmin2
+POST {{api}}/users
+Authorization: Bearer {{loginAdmin.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Second",
+  "lastName": "Admin",
+  "birthDate": "1990-02-02",
+  "email": "{{admin2Email}}",
+  "password": "{{admin2Password}}",
+  "roleName": "admin"
+}
+
+
+### 3) Создать обычного пользователя "Тест"
+# @name createTestUser
+POST {{api}}/users
+Authorization: Bearer {{loginAdmin.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Тест",
+  "lastName": "Пользователь",
+  "birthDate": "1995-05-05",
+  "email": "{{testEmail}}",
+  "password": "{{testPassword}}",
+  "roleName": "user"
+}
+
+
+### 4) Список всех пользователей (админ)
+GET {{api}}/users?limit=100&offset=0
+Authorization: Bearer {{loginAdmin.response.body.$.accessToken}}
+
+
+### 5) Получить конкретного пользователя (админ) — возьмём "Тест"
+GET {{api}}/users/{{createTestUser.response.body.$.id}}
+Authorization: Bearer {{loginAdmin.response.body.$.accessToken}}
+
+
+### 6) Заблокировать пользователя "Тест" (админ)
+PATCH {{api}}/users/{{createTestUser.response.body.$.id}}/block
+Authorization: Bearer {{loginAdmin.response.body.$.accessToken}}
+
+
+### 7) Разблокировать пользователя "Тест" (админ)
+PATCH {{api}}/users/{{createTestUser.response.body.$.id}}/unblock
+Authorization: Bearer {{loginAdmin.response.body.$.accessToken}}
+
+
+### 8) Логин обычного пользователя "Тест"
+# @name loginTest
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{testEmail}}",
+  "password": "{{testPassword}}"
+}
+
+
+### 9) Посмотреть информацию о себе (пользователь "Тест")
+GET {{api}}/users/{{createTestUser.response.body.$.id}}
+Authorization: Bearer {{loginTest.response.body.$.accessToken}}
+
+
+### 10) Попытка посмотреть другого пользователя (должен быть 403)
+# Возьмём id второго админа
+GET {{api}}/users/{{createAdmin2.response.body.$.id}}
+Authorization: Bearer {{loginTest.response.body.$.accessToken}}
+
+
+### 11) Попытка вывести список всех пользователей (должен быть 403)
+GET {{api}}/users?limit=100&offset=0
+Authorization: Bearer {{loginTest.response.body.$.accessToken}}
+
+
+### 12) Блокировка себя (пользователь "Тест" может заблокировать СЕБЯ)
+PATCH {{api}}/users/{{createTestUser.response.body.$.id}}/block
+Authorization: Bearer {{loginTest.response.body.$.accessToken}}
+
+
+### 13) Попытка разблокировать себя (должен быть 403 — только админ может)
+PATCH {{api}}/users/{{createTestUser.response.body.$.id}}/unblock
+Authorization: Bearer {{loginTest.response.body.$.accessToken}}

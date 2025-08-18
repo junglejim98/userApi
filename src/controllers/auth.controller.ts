@@ -1,25 +1,16 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { Request, Response } from 'express';
 import { pickRegisterBody } from '../utils/validation';
 import { registerUser } from '../services/auth.service';
 import jwt from 'jsonwebtoken';
 import { verifyCredentials } from '../services/auth.service';
 
-export async function register(req: Request, res: Response, next: NextFunction) {
-  try {
+export async function register(req: Request, res: Response) {
     const dto = pickRegisterBody(req.body);
-    const user = await registerUser(dto);
+    const user = await registerUser({ ...dto, roleName: undefined });
     return res.status(201).json(user);
-  } catch (err: unknown) {
-    if (err && typeof err === 'object' && 'status' in err) {
-      const e = err as { status?: number; payload?: unknown; message: string };
-      return res.status(e.status ?? 500).json(e.payload ?? { message: e.message });
-    }
-    next(err);
-  }
 }
 
-export async function login(req: Request, res: Response, next: NextFunction) {
-  try {
+export async function login(req: Request, res: Response) {
     const email = String(req.body.email ?? '')
       .trim()
       .toLocaleLowerCase();
@@ -48,7 +39,4 @@ export async function login(req: Request, res: Response, next: NextFunction) {
         status: user.status.status_name,
       },
     });
-  } catch (err) {
-    next(err);
-  }
 }
