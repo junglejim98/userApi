@@ -5,13 +5,17 @@ import type { PublicUser } from '../utils/userType';
 import { toPublicUser } from '../utils/userType';
 
 export async function getUserByIdPublic(id: number): Promise<PublicUser> {
-    const u = await prisma.user.findUnique({ where: {id}, include: { role: true, status: true} });
-    if(!u) throw new HttpError(404, 'Пользователь не найден');
-    return toPublicUser(u);
+  const u = await prisma.user.findUnique({ where: { id }, include: { role: true, status: true } });
+  if (!u) throw new HttpError(404, 'Пользователь не найден');
+  return toPublicUser(u);
 }
 
 export async function listUsersPublic(params: {
-  limit?: number; offset?: number; role?: string; status?: string; q?: string;
+  limit?: number;
+  offset?: number;
+  role?: string;
+  status?: string;
+  q?: string;
 }) {
   const { limit = 20, offset = 0, role, status, q } = params;
 
@@ -27,8 +31,8 @@ export async function listUsersPublic(params: {
     and.push({
       OR: [
         { first_name: { contains: q } },
-        { last_name:  { contains: q } },
-        { email:      { contains: q } },
+        { last_name: { contains: q } },
+        { email: { contains: q } },
       ],
     });
   }
@@ -50,27 +54,27 @@ export async function listUsersPublic(params: {
 }
 
 export async function blockUser(id: number) {
-    const blocked = await prisma.status.findUnique({ where: { status_name: 'blocked' } });
-    if(!blocked) throw new HttpError(500, 'Статус не инициализирован');
+  const blocked = await prisma.status.findUnique({ where: { status_name: 'blocked' } });
+  if (!blocked) throw new HttpError(500, 'Статус не инициализирован');
 
-    const user = await prisma.user.update({
-        where: { id },
-        data: { status_id: blocked.id },
-        include: { role: true, status: true },
-    });
+  const user = await prisma.user.update({
+    where: { id },
+    data: { status_id: blocked.id },
+    include: { role: true, status: true },
+  });
 
-    return toPublicUser(user);
+  return toPublicUser(user);
 }
 
 export async function unblockUser(id: number) {
-    const active = await prisma.status.findUnique({ where: { status_name: 'active' } });
-    if(!active) throw new HttpError(500, 'Статус не инициализирован');
+  const active = await prisma.status.findUnique({ where: { status_name: 'active' } });
+  if (!active) throw new HttpError(500, 'Статус не инициализирован');
 
-    const user = await prisma.user.update({
-        where: { id },
-        data: { status_id: active.id },
-        include: { role: true, status: true },
-    });
+  const user = await prisma.user.update({
+    where: { id },
+    data: { status_id: active.id },
+    include: { role: true, status: true },
+  });
 
-    return toPublicUser(user);
+  return toPublicUser(user);
 }

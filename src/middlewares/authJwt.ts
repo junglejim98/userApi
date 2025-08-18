@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import type { JwtPayload } from 'jsonwebtoken';
 import { HttpError } from '../utils/httpError';
 
 export interface AuthRequest extends Request {
@@ -32,6 +33,6 @@ export function authJwt(req: AuthRequest, res: Response, next: NextFunction) {
     req.user = { id: Number(payload.sub), role: payload.role };
     next();
   } catch {
-      throw new HttpError(401, 'Неверный или истекший токен');
+    throw new HttpError(401, 'Неверный или истекший токен');
   }
 }

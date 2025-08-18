@@ -5,38 +5,38 @@ import jwt from 'jsonwebtoken';
 import { verifyCredentials } from '../services/auth.service';
 
 export async function register(req: Request, res: Response) {
-    const dto = pickRegisterBody(req.body);
-    const user = await registerUser({ ...dto, roleName: undefined });
-    return res.status(201).json(user);
+  const dto = pickRegisterBody(req.body);
+  const user = await registerUser({ ...dto, roleName: undefined });
+  return res.status(201).json(user);
 }
 
 export async function login(req: Request, res: Response) {
-    const email = String(req.body.email ?? '')
-      .trim()
-      .toLocaleLowerCase();
-    const password = String(req.body.password ?? '');
+  const email = String(req.body.email ?? '')
+    .trim()
+    .toLocaleLowerCase();
+  const password = String(req.body.password ?? '');
 
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email и пароль обязательны' });
-    }
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email и пароль обязательны' });
+  }
 
-    const user = await verifyCredentials(email, password);
+  const user = await verifyCredentials(email, password);
 
-    const token = jwt.sign(
-      { sub: user.id, role: user.role.role_name },
-      process.env.JWT_SECRET as string,
-      { expiresIn: '1h' },
-    );
+  const token = jwt.sign(
+    { sub: user.id, role: user.role.role_name },
+    process.env.JWT_SECRET as string,
+    { expiresIn: '1h' },
+  );
 
-    return res.json({
-      accessToken: token,
-      tokenType: 'Bearer',
-      expiresIn: 3600,
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role.role_name,
-        status: user.status.status_name,
-      },
-    });
+  return res.json({
+    accessToken: token,
+    tokenType: 'Bearer',
+    expiresIn: 3600,
+    user: {
+      id: user.id,
+      email: user.email,
+      role: user.role.role_name,
+      status: user.status.status_name,
+    },
+  });
 }

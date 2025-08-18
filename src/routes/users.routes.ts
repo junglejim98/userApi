@@ -5,13 +5,13 @@ import { requireSelfOrAdmin } from '../middlewares/requireSelfOrAdmin';
 import { createByAdmin, getById, list, block, unblock } from '../controllers/users.controller';
 
 const router = Router();
-router.post('/', authJwt,  requireAdmin, createByAdmin);
+router.post('/', authJwt, requireAdmin, createByAdmin);
 
-router.get('/:id', authJwt,  requireSelfOrAdmin, getById);
+router.get('/:id', authJwt, requireSelfOrAdmin, getById);
 
-router.get('/', authJwt,  requireAdmin, list);
+router.get('/', authJwt, requireAdmin, list);
 
-router.patch('/:id/block', authJwt,  requireSelfOrAdmin, block);
-router.patch('/:id/unblock', authJwt,  requireAdmin, unblock);
+router.patch('/:id/block', authJwt, requireSelfOrAdmin, block);
+router.patch('/:id/unblock', authJwt, requireAdmin, unblock);
 
 export default router;
