@@ -11,7 +11,7 @@ import { HttpError } from '../utils/httpError';
 
 export async function createByAdmin(req: AuthRequest, res: Response) {
   const { firstName, lastName, middleName, birthDate, email, password, role } = req.body;
-  
+
   const roleName = (role || 'user').toString().trim().toLowerCase();
   if (!['user', 'admin'].includes(roleName)) {
     throw new HttpError(400, 'Роль должна быть user или admin');
@@ -49,7 +49,6 @@ export async function list(req: AuthRequest, res: Response) {
   const status = typeof req.query.status === 'string' ? req.query.status : undefined;
   const q = typeof req.query.q === 'string' ? req.query.q : undefined;
   res.json(await listUsersPublic({ limit, offset, role, status, q }));
-  
 }
 
 export async function block(req: AuthRequest, res: Response) {

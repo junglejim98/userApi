@@ -17,7 +17,7 @@ export async function login(req: Request, res: Response) {
   const password = String(req.body.password ?? '');
 
   if (!email || !password) {
-    throw new HttpError(400, 'Email и/или пароль обязательны')
+    throw new HttpError(400, 'Email и/или пароль обязательны');
   }
 
   const user = await verifyCredentials(email, password);
