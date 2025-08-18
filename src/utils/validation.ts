@@ -31,7 +31,7 @@ export function isPassword(v: unknown): v is string {
   return typeof v === 'string' && v.length >= 8 && v.length <= 72;
 }
 
-export function pickRegisterBody(body: RegisterBody) {
+export function allBodyData(body: RegisterBody) {
   const errors: { path: string; message: string }[] = [];
 
   if (!isNonEmptyString(body.firstName))

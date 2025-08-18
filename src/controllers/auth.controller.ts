@@ -1,23 +1,23 @@
 import type { Request, Response } from 'express';
-import { pickRegisterBody } from '../utils/validation';
-import { registerUser } from '../services/auth.service';
+import { allBodyData } from '../utils/validation';
 import jwt from 'jsonwebtoken';
-import { verifyCredentials } from '../services/auth.service';
+import { verifyCredentials, registerUser } from '../services/auth.service';
+import { HttpError } from '../utils/httpError';
 
 export async function register(req: Request, res: Response) {
-  const dto = pickRegisterBody(req.body);
-  const user = await registerUser({ ...dto, roleName: undefined });
+  const data = allBodyData(req.body);
+  const user = await registerUser({ ...data, roleName: undefined });
   return res.status(201).json(user);
 }
 
 export async function login(req: Request, res: Response) {
   const email = String(req.body.email ?? '')
     .trim()
-    .toLocaleLowerCase();
+    .toLowerCase();
   const password = String(req.body.password ?? '');
 
   if (!email || !password) {
-    return res.status(400).json({ message: 'Email и пароль обязательны' });
+    throw new HttpError(400, 'Email и/или пароль обязательны')
   }
 
   const user = await verifyCredentials(email, password);
@@ -31,12 +31,9 @@ export async function login(req: Request, res: Response) {
   return res.json({
     accessToken: token,
     tokenType: 'Bearer',
-    expiresIn: 3600,
+    expiresIn: '1h',
     user: {
-      id: user.id,
       email: user.email,
-      role: user.role.role_name,
-      status: user.status.status_name,
     },
   });
 }
