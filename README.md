@@ -65,17 +65,32 @@ ADMIN_PASSWORD="admin123ADMIN"
 ```bash
 .
 ├── prisma/
-│   ├── schema.prisma      # описание моделей
-│   └── seed.ts            # создание ролей, статусов, админа
+│   ├── migrations/               # миграции Prisma (генерируются)
+│   └── schema.prisma             # схема БД (User/Role/Status и пр.)
 ├── src/
-│   ├── controllers/       # логика роутов
-│   ├── middlewares/       # requireAdmin, authJwt и др.
-│   ├── routes/            # /auth, /users
-│   ├── utils/             # HttpError, валидаторы
-│   └── app.ts             # точка входа
-├── api.http               # тестовые запросы
-├── package.json
-└── README.md
+│   ├── app.ts                    # инициализация Express, роуты, error handler
+│   ├── server.ts                 # запуск сервера (listen)
+│   ├── db/
+│   │   └── prisma.ts             # PrismaClient
+│   ├── controllers/
+│   │   ├── auth.controller.ts    # register/login
+│   │   └── users.controller.ts   # createByAdmin/getById/list/block/unblock
+│   ├── middlewares/
+│   │   ├── authJwt.ts            # проверка Bearer JWT → req.user
+│   │   ├── requireAdmin.ts       # доступ только admin
+│   │   └── requireSelfOrAdmin.ts # доступ сам/админ
+│   ├── routes/
+│   │   ├── auth.routes.ts        # /api/auth (register, login)
+│   │   └── users.routes.ts       # /api/users (CRUD/блокировки)
+│   ├── services/
+│   │   ├── auth.service.ts       # registerUser/verifyCredentials
+│   │   └── users.service.ts      # list/get/block/unblock
+│   └── utils/
+│       ├── httpError.ts          # HttpError(status, message)
+│       ├── userType.ts           # PublicUser + toPublicUser()
+│       ├── validation.ts         # allBodyData()/isEmail()/toPastDate()
+│       └── seed.ts               # сиды ролей/статусов/админа (если лежит в src)
+└── api.http                      # сценарии ручной проверки (REST Client)                      
 ```
 
 ***
