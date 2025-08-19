@@ -1,31 +1,31 @@
-User Service
+# User Service
 
 Сервис работы с пользователями на Express + TypeScript + Prisma (SQLite).
 Реализованы эндпоинты из ТЗ: регистрация, авторизация, получение пользователя, список пользователей, блокировка/разблокировка.
 
 ***
 
-Запуск проекта
+## Запуск проекта
 
 1. Установить зависимости
 
-npm install
+`npm install`
 
 2. Создать базу, выполнить миграции, заполнить справочники и создать администратора
 
-npx prisma migrate dev --name init
+`npx prisma migrate dev --name init`
 
 3. Запуск сервера
 
-npm run dev
+`npm run dev`
 
 Сервер будет доступен по адресу:
 http://localhost:3000
 
 ***
 
-Переменные окружения (.env)
-
+## Переменные окружения (`.env`)
+```bash
 # Prisma DB URL (SQLite по умолчанию)
 DATABASE_URL="file:./dev.db"
 
@@ -35,21 +35,21 @@ JWT_SECRET="change-me"
 # Данные для seed-скрипта (создание первого администратора)
 ADMIN_EMAIL="admin@example.com"
 ADMIN_PASSWORD="admin123ADMIN"
-
-
-***
-
-Основные эндпоинты
- • POST /api/auth/register — регистрация пользователя
- • POST /api/auth/login — авторизация, возвращает JWT
- • GET /api/users/:id — получить пользователя (сам себя или админ)
- • GET /api/users — список пользователей (только админ)
- • PATCH /api/users/:id/block — блокировка (сам себя или админ)
- • PATCH /api/users/:id/unblock — разблокировка (только админ)
+```
 
 ***
 
-Проверка вручную
+## Основные эндпоинты
+ - POST /api/auth/register — регистрация пользователя
+ - POST /api/auth/login — авторизация, возвращает JWT
+ - GET /api/users/:id — получить пользователя (сам себя или админ)
+ - GET /api/users — список пользователей (только админ)
+ - PATCH /api/users/:id/block — блокировка (сам себя или админ)
+ - PATCH /api/users/:id/unblock — разблокировка (только админ)
+
+***
+
+## Проверка вручную
 
 В проекте есть файл api.http (формат VSCode REST Client).
 В нём примеры последовательных запросов:
@@ -61,8 +61,8 @@ ADMIN_PASSWORD="admin123ADMIN"
 
 ***
 
-Структура проекта
-
+## Структура проекта
+```bash
 .
 ├── prisma/
 │   ├── schema.prisma      # описание моделей
@@ -76,6 +76,6 @@ ADMIN_PASSWORD="admin123ADMIN"
 ├── api.http               # тестовые запросы
 ├── package.json
 └── README.md
-
+```
 
 ***
