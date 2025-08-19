@@ -2,8 +2,16 @@
   "name": "userapi",
   "version": "1.0.0",
   "main": "index.js",
+  "prisma": {
+    "seed": "ts-node src/utils/seed.ts"
+  },
+  "type": "module",
   "scripts": {
     "lint": "eslint \"./src/**/*.{js,ts}\"",
+    "seed": "ts-node src/utils/seed.ts",
+    "migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
     "format": "prettier --write \"./src/**/*.{js,ts,json,md}\"",
     "prepare": "husky",
     "dev": "ts-node src/server.ts",
@@ -25,7 +33,6 @@
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",
     "@types/express": "^5.0.3",
-    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.2.1",
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
@@ -43,6 +50,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.14.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2"
