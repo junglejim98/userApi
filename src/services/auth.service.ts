@@ -15,7 +15,7 @@ export async function registerUser(input: {
   birthDate: Date;
   email: string;
   password: string;
-  roleName?: string;
+  roleName?: 'admin' | 'user';
 }): Promise<PublicUser> {
   const roleName = input.roleName ?? 'user';
   const roleUser = await prisma.role.findUnique({ where: { role_name: roleName } });
@@ -34,7 +34,7 @@ export async function registerUser(input: {
         last_name: input.lastName,
         middle_name: input.middleName ?? null,
         birth_date: input.birthDate,
-        email: input.email,
+        email: String(input.email).trim().toLowerCase(),
         password_hash,
         role_id: roleUser.id,
         status_id: statusActive.id,

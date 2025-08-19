@@ -5,6 +5,10 @@ import type { Request, Response, NextFunction } from 'express';
 import { HttpError } from './utils/httpError';
 import { Prisma } from '@prisma/client';
 
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET не задан, для работы программы токен обязателен.');
+}
+
 export const app = express();
 app.use(express.json());
 

@@ -29,8 +29,9 @@ export function authJwt(req: AuthRequest, res: Response, next: NextFunction) {
     if (!payload.sub || (payload.role !== 'admin' && payload.role !== 'user')) {
       throw new HttpError(401, 'Неверный или истекший токен');
     }
-
-    req.user = { id: Number(payload.sub), role: payload.role };
+    const pay = Number(payload.sub);
+    if (Number.isNaN(pay)) throw new HttpError(401, 'Неверный или истекший токен');
+    req.user = { id: pay, role: payload.role };
     next();
   } catch {
     throw new HttpError(401, 'Неверный или истекший токен');

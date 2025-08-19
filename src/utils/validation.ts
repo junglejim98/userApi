@@ -1,3 +1,5 @@
+import { HttpError } from './httpError';
+
 interface RegisterBody {
   firstName: string;
   lastName: string;
@@ -5,7 +7,6 @@ interface RegisterBody {
   birthDate: string;
   email: string;
   password: string;
-  roleName?: string;
 }
 
 export function isNonEmptyString(v: unknown, max = 100): v is string {
@@ -23,7 +24,7 @@ export function toPastDate(value: unknown): Date | null {
 
 export function isEmail(v: unknown): v is string {
   if (typeof v !== 'string') return false;
-  const s = v.trim().toLocaleLowerCase();
+  const s = v.trim().toLowerCase();
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 }
 
@@ -32,38 +33,23 @@ export function isPassword(v: unknown): v is string {
 }
 
 export function allBodyData(body: RegisterBody) {
-  const errors: { path: string; message: string }[] = [];
-
-  if (!isNonEmptyString(body.firstName))
-    errors.push({ path: 'firstName', message: 'Обязательное поле' });
-  if (!isNonEmptyString(body.lastName))
-    errors.push({ path: 'lastName', message: 'Обязательно поле' });
+  if (!isNonEmptyString(body.firstName)) throw new HttpError(400, 'Имя - Обязательное поле');
+  if (!isNonEmptyString(body.lastName)) throw new HttpError(400, 'Фамилия - Обязательное поле');
 
   let middleName: string | undefined = undefined;
 
   if (typeof body.middleName === 'string' && body.middleName.trim() !== '') {
-    if (!isNonEmptyString(body.middleName))
-      errors.push({ path: 'middleName', message: 'Некорректное значение' });
+    if (!isNonEmptyString(body.middleName)) throw new HttpError(400, 'Некорректное значение');
     else middleName = body.middleName.trim();
   }
 
   const birthDate = toPastDate(body.birthDate);
-  if (!birthDate) errors.push({ path: 'birthDate', message: 'Дата должна быть в прошлом' });
+  if (!birthDate) throw new HttpError(400, 'Дата должна быть в прошлом');
 
-  if (!isEmail(body.email)) errors.push({ path: 'email', message: 'Некорректный email' });
+  if (!isEmail(body.email)) throw new HttpError(400, 'Некорректный email');
   const email = String(body.email).trim().toLowerCase();
 
-  if (!isPassword(body.password)) errors.push({ path: 'password', message: 'Минимум 8 символов' });
-
-  if (errors.length) {
-    const err = new Error('Ошибка валидации') as Error & {
-      status?: number;
-      payload?: unknown;
-    };
-    err.status = 400;
-    err.payload = { message: err.message, errors };
-    throw err;
-  }
+  if (!isPassword(body.password)) throw new HttpError(400, 'Минимальная длина пароля 8 символов');
 
   return {
     firstName: body.firstName.trim(),
@@ -71,7 +57,6 @@ export function allBodyData(body: RegisterBody) {
     middleName,
     birthDate: birthDate!,
     email,
-    password: body.password as string,
-    roleName: body.roleName ? String(body.roleName).trim().toLowerCase() : undefined,
+    password: body.password.trim(),
   };
 }
