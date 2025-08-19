@@ -3,7 +3,7 @@ User Service
 Сервис работы с пользователями на Express + TypeScript + Prisma (SQLite).
 Реализованы эндпоинты из ТЗ: регистрация, авторизация, получение пользователя, список пользователей, блокировка/разблокировка.
 
-⸻
+***
 
 Запуск проекта
 
@@ -22,7 +22,7 @@ npm run dev
 Сервер будет доступен по адресу:
 http://localhost:3000
 
-⸻
+***
 
 Переменные окружения (.env)
 
@@ -37,7 +37,7 @@ ADMIN_EMAIL="admin@example.com"
 ADMIN_PASSWORD="admin123ADMIN"
 
 
-⸻
+***
 
 Основные эндпоинты
  • POST /api/auth/register — регистрация пользователя
@@ -47,7 +47,7 @@ ADMIN_PASSWORD="admin123ADMIN"
  • PATCH /api/users/:id/block — блокировка (сам себя или админ)
  • PATCH /api/users/:id/unblock — разблокировка (только админ)
 
-⸻
+***
 
 Проверка вручную
 
@@ -59,7 +59,7 @@ ADMIN_PASSWORD="admin123ADMIN"
  4. Список пользователей
  5. Блокировка/разблокировка
 
-⸻
+***
 
 Структура проекта
 
@@ -78,4 +78,4 @@ ADMIN_PASSWORD="admin123ADMIN"
 └── README.md
 
 
-⸻
+***
