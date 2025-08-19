@@ -1,8 +1,8 @@
 import type { Request, Response } from 'express';
-import { allBodyData } from '../utils/validation';
+import { allBodyData } from '../utils/validation.js';
 import jwt from 'jsonwebtoken';
-import { verifyCredentials, registerUser } from '../services/auth.service';
-import { HttpError } from '../utils/httpError';
+import { verifyCredentials, registerUser } from '../services/auth.service.js';
+import { HttpError } from '../utils/httpError.js';
 
 export async function register(req: Request, res: Response) {
   const data = allBodyData(req.body);

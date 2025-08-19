@@ -3,18 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "prisma": {
-    "seed": "ts-node src/utils/seed.ts"
+    "seed": "tsx src/utils/seed.ts"
   },
   "type": "module",
   "scripts": {
     "lint": "eslint \"./src/**/*.{js,ts}\"",
-    "seed": "ts-node src/utils/seed.ts",
     "migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "format": "prettier --write \"./src/**/*.{js,ts,json,md}\"",
     "prepare": "husky",
-    "dev": "ts-node src/server.ts",
+    "dev": "tsx src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
   },
@@ -45,6 +44,7 @@
     "prettier": "^3.6.2",
     "prisma": "^6.14.0",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.4",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.39.1"
   },

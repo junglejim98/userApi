@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import type { JwtPayload } from 'jsonwebtoken';
-import { HttpError } from '../utils/httpError';
+import { HttpError } from '../utils/httpError.js';
 
 export interface AuthRequest extends Request {
   user?: { id: number; role: 'admin' | 'user' };

@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs';
-import prisma from '../db/prisma';
+import prisma from '../db/prisma.js';
 import { Prisma } from '@prisma/client';
 import type { User, Role, Status } from '@prisma/client';
-import { HttpError } from '../utils/httpError';
-import type { PublicUser } from '../utils/userType';
-import { toPublicUser } from '../utils/userType';
+import { HttpError } from '../utils/httpError.js';
+import type { PublicUser } from '../utils/userType.js';
+import { toPublicUser } from '../utils/userType.js';
 
 export type UserWithRs = User & { role: Role; status: Status };
 

@@ -1,13 +1,13 @@
 import type { Response } from 'express';
-import type { AuthRequest } from '../middlewares/authJwt';
-import { registerUser } from '../services/auth.service';
+import type { AuthRequest } from '../middlewares/authJwt.js';
+import { registerUser } from '../services/auth.service.js';
 import {
   getUserByIdPublic,
   listUsersPublic,
   blockUser,
   unblockUser,
-} from '../services/users.service';
-import { HttpError } from '../utils/httpError';
+} from '../services/users.service.js';
+import { HttpError } from '../utils/httpError.js';
 
 export async function createByAdmin(req: AuthRequest, res: Response) {
   const { firstName, lastName, middleName, birthDate, email, password, role } = req.body;

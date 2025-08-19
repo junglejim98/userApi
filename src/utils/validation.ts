@@ -1,4 +1,4 @@
-import { HttpError } from './httpError';
+import { HttpError } from './httpError.js';
 
 interface RegisterBody {
   firstName: string;

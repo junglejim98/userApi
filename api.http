@@ -44,7 +44,7 @@ Content-Type: application/json
   "birthDate": "1990-02-02",
   "email": "{{admin2Email}}",
   "password": "{{admin2Password}}",
-  "roleName": "admin"
+  "role": "admin"
 }
 
 
@@ -60,7 +60,7 @@ Content-Type: application/json
   "birthDate": "1995-05-05",
   "email": "{{testEmail}}",
   "password": "{{testPassword}}",
-  "roleName": "user"
+  "role": "user"
 }
 
 
@@ -115,7 +115,21 @@ Authorization: Bearer {{loginTest.response.body.$.accessToken}}
 PATCH {{api}}/users/{{createTestUser.response.body.$.id}}/block
 Authorization: Bearer {{loginTest.response.body.$.accessToken}}
 
+### 12b) Попытка логина после блокировки — должен быть 403
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{testEmail}}",
+  "password": "{{testPassword}}"
+}
 
 ### 13) Попытка разблокировать себя (должен быть 403 — только админ может)
 PATCH {{api}}/users/{{createTestUser.response.body.$.id}}/unblock
 Authorization: Bearer {{loginTest.response.body.$.accessToken}}
+
+### 14) Невалидный JSON (ожидаем 400)
+POST {{api}}/auth/login
+Content-Type: application/json
+
+{ "email": "x@example.com",  "password": "xxx"  

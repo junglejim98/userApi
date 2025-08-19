@@ -1,6 +1,6 @@
 import type { Response, NextFunction } from 'express';
-import type { AuthRequest } from './authJwt';
-import { HttpError } from '../utils/httpError';
+import type { AuthRequest } from './authJwt.js';
+import { HttpError } from '../utils/httpError.js';
 
 export function requireSelfOrAdmin(req: AuthRequest, res: Response, next: NextFunction) {
   const paramId = Number(req.params.id);

@@ -1,8 +1,8 @@
-import prisma from '../db/prisma';
+import prisma from '../db/prisma.js';
 import { Prisma } from '@prisma/client';
-import { HttpError } from '../utils/httpError';
-import type { PublicUser } from '../utils/userType';
-import { toPublicUser } from '../utils/userType';
+import { HttpError } from '../utils/httpError.js';
+import type { PublicUser } from '../utils/userType.js';
+import { toPublicUser } from '../utils/userType.js';
 
 export async function getUserByIdPublic(id: number): Promise<PublicUser> {
   const u = await prisma.user.findUnique({ where: { id }, include: { role: true, status: true } });

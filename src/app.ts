@@ -1,8 +1,8 @@
 import express from 'express';
-import authRoutes from './routes/auth.routes';
-import usersRoutes from './routes/users.routes';
+import authRoutes from './routes/auth.routes.js';
+import usersRoutes from './routes/users.routes.js';
 import type { Request, Response, NextFunction } from 'express';
-import { HttpError } from './utils/httpError';
+import { HttpError } from './utils/httpError.js';
 import { Prisma } from '@prisma/client';
 
 if (!process.env.JWT_SECRET) {
