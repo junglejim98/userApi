@@ -40,12 +40,12 @@ ADMIN_PASSWORD="admin123ADMIN"
 ***
 
 ## Основные эндпоинты
- - POST /api/auth/register — регистрация пользователя
- - POST /api/auth/login — авторизация, возвращает JWT
- - GET /api/users/:id — получить пользователя (сам себя или админ)
- - GET /api/users — список пользователей (только админ)
- - PATCH /api/users/:id/block — блокировка (сам себя или админ)
- - PATCH /api/users/:id/unblock — разблокировка (только админ)
+ - POST /api/auth/register - регистрация пользователя
+ - POST /api/auth/login - авторизация, возвращает JWT
+ - GET /api/users/:id - получить пользователя (сам себя или админ)
+ - GET /api/users - список пользователей (только админ)
+ - PATCH /api/users/:id/block - блокировка (сам себя или админ)
+ - PATCH /api/users/:id/unblock - разблокировка (только админ)
 
 ***
 
